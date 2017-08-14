@@ -2,6 +2,7 @@ sudo: false
 language: rust
 os:
   - linux
+  - osx
 rust:
   - stable
   - beta
@@ -14,4 +15,4 @@ matrix:
 script:
 - cargo build
 - cargo test
-- cargo docs
+- cargo doc
