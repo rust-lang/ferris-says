@@ -1,0 +1,15 @@
+[package]
+name = "ferris-says"
+version = "0.1.0"
+authors = ["Michael Gattozzi <mgattozzi@gmail.com>"]
+
+[[bin]]
+name = "fsays"
+
+[lib]
+name = "ferris_says"
+
+[dependencies]
+smallvec = "*"
+clap = "*"
+error-chain = "*"
