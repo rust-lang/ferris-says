@@ -2,6 +2,24 @@
 name = "ferris-says"
 version = "0.1.0"
 authors = ["Michael Gattozzi <mgattozzi@gmail.com>"]
+description = "A Rust flavored replacement for the classic cowsay"
+documentation = "https://docs.rs/ferris-says"
+homepage = "https://github.com/mgattozzi/ferris-says"
+repository = "https://github.com/mgattozzi/ferris-says"
+readme = "README.md"
+keywords = ["ferris", "cowsay", "print", "fsays", "rustacean"]
+categories = [
+  "text-processing",
+  "visualization",
+  "rendering",
+  "command-line-utilities",
+  "value-formatting"
+]
+license = "MIT/Apache-2.0"
+
+[badges]
+travis-ci = { repository = "mgattozzi/ferris-says", branch = "master" }
+appveyor = { repository = "mgattozzi/ferris-says", branch = "master", service = "github" }
 
 [[bin]]
 name = "fsays"
@@ -10,6 +28,6 @@ name = "fsays"
 name = "ferris_says"
 
 [dependencies]
-smallvec = "*"
-clap = "*"
-error-chain = "*"
+smallvec = "0.4"
+clap = "2.25"
+error-chain = "0.10"
