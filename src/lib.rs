@@ -30,7 +30,7 @@ const BUFSIZE: usize = 2048;
 const OFFSET:  usize = 4;
 
 
-/// Have Ferris print out him saying something.
+/// Have Ferris print out her saying something.
 ///
 /// `input` is a slice of bytes that you want to be written out to somewhere
 ///
