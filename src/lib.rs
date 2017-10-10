@@ -7,14 +7,14 @@ use std::iter::repeat;
 // Constants! :D
 const ENDSL:   &[u8] = b"| ";
 const ENDSR:   &[u8] = b" |\n";
-const FERRIS:  &[u8] = b"
-              \\
-               \\
+const FERRIS:  &[u8] = br#"
+              \
+               \
                   _~^~^~_
-              \\) /  o o  \\ (/
+              \) /  o o  \ (/
                 '_   -   _'
-                / '-----' \\
-";
+                / '-----' \
+"#;
 const NEWLINE: u8 = '\n' as u8;
 const SPACE:   u8  = ' ' as u8;
 const DASH:    u8  = '-' as u8;
@@ -30,7 +30,7 @@ const BUFSIZE: usize = 2048;
 const OFFSET:  usize = 4;
 
 
-/// Have Ferris print out him saying something.
+/// Have Ferris print out her saying something.
 ///
 /// `input` is a slice of bytes that you want to be written out to somewhere
 ///
