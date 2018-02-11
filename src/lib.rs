@@ -7,6 +7,7 @@ use std::iter::repeat;
 // Constants! :D
 const ENDSL:   &[u8] = b"| ";
 const ENDSR:   &[u8] = b" |\n";
+#[cfg(not(feature = "clippy"))]
 const FERRIS:  &[u8] = br#"
               \
                \
@@ -14,6 +15,20 @@ const FERRIS:  &[u8] = br#"
               \) /  o o  \ (/
                 '_   -   _'
                 / '-----' \
+"#;
+#[cfg(feature = "clippy")]
+const CLIPPY:  &[u8] = br#"
+              \
+               \
+                  __
+                 /  \
+                 |  |
+                 @  @
+                 |  |
+                 || |/
+                 || ||
+                 |\_/|
+                 \___/
 "#;
 const NEWLINE: u8 = '\n' as u8;
 const SPACE:   u8  = ' ' as u8;
@@ -94,6 +109,9 @@ pub fn say<W>(input: &[u8], width: usize, writer: &mut W) -> Result<()>
 
     }
     write_buffer.extend_from_slice(&bar_buffer);
+    #[cfg(feature = "clippy")]
+    write_buffer.extend_from_slice(CLIPPY);
+    #[cfg(not(feature = "clippy"))]
     write_buffer.extend_from_slice(FERRIS);
     writer.write_all(&write_buffer)?;
 
