@@ -23,9 +23,13 @@ appveyor = { repository = "mgattozzi/ferris-says", branch = "master", service = 
 
 [[bin]]
 name = "fsays"
+path = "src/bin/main.rs"
 
 [lib]
 name = "ferris_says"
+
+[features]
+clippy = []
 
 [dependencies]
 smallvec = "0.4"
