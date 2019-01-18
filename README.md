@@ -13,7 +13,7 @@ Put the following in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ferris_says = "0.1"
+ferris-says = "0.1"
 ```
 
 Then import the crate with:
