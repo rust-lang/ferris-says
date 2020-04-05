@@ -44,15 +44,15 @@ fn main() {
 This will print out this when run:
 
 ```plain
-----------------------------
-| Hello fellow Rustaceans! |
-----------------------------
-              \
-               \
-                 _~^~^~_
-             \) /  o o  \ (/
-               '_   -   _'
-               / '-----' \
+ __________________________
+< Hello fellow Rustaceans! >
+ --------------------------
+        \
+         \
+            _~^~^~_
+        \) /  o o  \ (/
+          '_   -   _'
+          / '-----' \
 ```
 
 ## How to use the binary
@@ -61,21 +61,42 @@ The binary version is called `fsays`. It reads input from `stdin` and prints it
 out to the console.
 
 ```bash
-echo 'Hello fellow Rustaceans!' | fsays --width 24
+fsays 'Hello fellow Rustaceans!'
 ```
 
 This will print out this when run:
 
 ```plain
-----------------------------
-| Hello fellow Rustaceans! |
-----------------------------
-              \
-               \
-                 _~^~^~_
-             \) /  o o  \ (/
-               '_   -   _'
-               / '-----' \
+ __________________________
+< Hello fellow Rustaceans! >
+ --------------------------
+        \
+         \
+            _~^~^~_
+        \) /  o o  \ (/
+          '_   -   _'
+          / '-----' \
+```
+
+A width can also be specified, if desired.
+
+```bash
+fsays --width 12 'Hello fellow Rustaceans!'
+```
+
+will result in the following output:
+
+```plain
+ ______________
+/ Hello fellow \
+\ Rustaceans!  /
+ --------------
+        \
+         \
+            _~^~^~_
+        \) /  o o  \ (/
+          '_   -   _'
+          / '-----' \
 ```
 
 You can also use multiple files as input by using the `-f`/`--files` flag!
