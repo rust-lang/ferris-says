@@ -4,8 +4,7 @@ A library for printing out text with Ferris as the mascot!
 
 ## Build requirements
 
-You only need a stable version of the Rust compiler. Due to the use of the `?`
-operator only versions 1.15 and up of `rustc` are supported.
+You only need a stable version of the Rust compiler.
 
 ## How to use the library
 
@@ -13,7 +12,7 @@ Put the following in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ferris-says = "0.1"
+ferris-says = "0.2"
 ```
 
 Then import the crate with:
