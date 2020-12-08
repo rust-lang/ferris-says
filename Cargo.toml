@@ -35,5 +35,5 @@ clippy = []
 smallvec = "0.4"
 clap = "2.25"
 error-chain = "0.10"
-textwrap = "0.11.0"
+textwrap = "0.13"
 unicode-width = "0.1.7"
