@@ -15,4 +15,6 @@ matrix:
 script:
 - cargo build
 - cargo test
+- cargo build --features clippy
+- cargo test --features clippy
 - cargo doc
