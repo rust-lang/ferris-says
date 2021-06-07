@@ -91,7 +91,10 @@ where
     let mut write_buffer = SmallVec::<[u8; BUFSIZE]>::new();
 
     // Let textwrap work its magic
-    let wrapped = fill(unsafe { str::from_utf8_unchecked(input) }, max_width);
+    let wrapped = fill(
+        str::from_utf8(input).map_err(|_| std::io::ErrorKind::InvalidData)?,
+        max_width,
+    );
 
     let lines: Vec<&str> = wrapped.lines().collect();
 
