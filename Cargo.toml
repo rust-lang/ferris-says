@@ -1,6 +1,6 @@
 [package]
 name = "ferris-says"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Michael Gattozzi <mgattozzi@gmail.com>"]
 description = "A Rust flavored replacement for the classic cowsay"
 documentation = "https://docs.rs/ferris-says"
@@ -21,10 +21,6 @@ license = "MIT/Apache-2.0"
 travis-ci = { repository = "mgattozzi/ferris-says", branch = "master" }
 appveyor = { repository = "mgattozzi/ferris-says", branch = "master", service = "github" }
 
-[[bin]]
-name = "fsays"
-path = "src/bin/main.rs"
-
 [lib]
 name = "ferris_says"
 
@@ -33,7 +29,8 @@ clippy = []
 
 [dependencies]
 smallvec = "0.4"
-clap = "2.25"
-error-chain = "0.10"
 textwrap = "0.13"
 unicode-width = "0.1.7"
+
+[workspace]
+members = ["fsays"]
