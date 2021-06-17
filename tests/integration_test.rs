@@ -9,6 +9,7 @@ const DEFAULT_WIDTH: usize = 40;
 fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
     //Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
+    #[cfg(not(feature = "gopher"))]
     let expected = br#"
  __________________________
 < Hello fellow Rustaceans! >
@@ -36,6 +37,25 @@ fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
            || ||
            |\_/|
            \___/
+"#;
+    #[cfg(feature = "gopher")]
+    let expected = br#"
+ __________________________
+< Hello fellow Rustaceans! >
+ --------------------------
+      \
+       \
+         ,_---~~~~~----._
+  _,,_,*^____      _____``*g*\"*,
+ / __/ /'     ^.  /      \ ^@q   f
+[  @f | @))    |  | @))   l  0 _/
+ \`/   \~____ / __ \_____/    \
+  |           _l__l_           I
+  }          [______]           I
+  ]            | | |            |
+  ]             ~ ~             |
+  |                            |
+   |                           |
 "#;
 
     let input = b"Hello fellow Rustaceans!";
@@ -55,6 +75,7 @@ fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
 fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
     //Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
+    #[cfg(not(feature = "gopher"))]
     let expected = br#"
  ______________
 / Hello fellow \
@@ -85,7 +106,26 @@ fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
            |\_/|
            \___/
 "#;
-
+    #[cfg(feature = "gopher")]
+    let expected = br#"
+ ______________
+/ Hello fellow \
+\ Rustaceans!  /
+ --------------
+      \
+       \
+         ,_---~~~~~----._
+  _,,_,*^____      _____``*g*\"*,
+ / __/ /'     ^.  /      \ ^@q   f
+[  @f | @))    |  | @))   l  0 _/
+ \`/   \~____ / __ \_____/    \
+  |           _l__l_           I
+  }          [______]           I
+  ]            | | |            |
+  ]             ~ ~             |
+  |                            |
+   |                           |
+"#;
     let input = b"Hello fellow Rustaceans!";
     let width = 12;
 
@@ -103,6 +143,7 @@ fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
 fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
     //Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
+    #[cfg(not(feature = "gopher"))]
     let expected = br#"
  ________
 / Hello  \
@@ -137,7 +178,28 @@ fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
            |\_/|
            \___/
 "#;
-
+    #[cfg(feature = "gopher")]
+    let expected = br#"
+ ________
+/ Hello  \
+| fellow |
+| Rustac |
+\ eans!  /
+ --------
+      \
+       \
+         ,_---~~~~~----._
+  _,,_,*^____      _____``*g*\"*,
+ / __/ /'     ^.  /      \ ^@q   f
+[  @f | @))    |  | @))   l  0 _/
+ \`/   \~____ / __ \_____/    \
+  |           _l__l_           I
+  }          [______]           I
+  ]            | | |            |
+  ]             ~ ~             |
+  |                            |
+   |                           |
+"#;
     let input = b"Hello fellow Rustaceans!";
     let width = 6;
 
@@ -155,6 +217,7 @@ fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
 fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
     //Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
+    #[cfg(not(feature = "gopher"))]
     let expected = br#"
  _____
 / Hel \
@@ -197,7 +260,32 @@ fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
            |\_/|
            \___/
 "#;
-
+    #[cfg(feature = "gopher")]
+    let expected = br#"
+ _____
+/ Hel \
+| lo  |
+| fel |
+| low |
+| Rus |
+| tac |
+| ean |
+\ s!  /
+ -----
+      \
+       \
+         ,_---~~~~~----._
+  _,,_,*^____      _____``*g*\"*,
+ / __/ /'     ^.  /      \ ^@q   f
+[  @f | @))    |  | @))   l  0 _/
+ \`/   \~____ / __ \_____/    \
+  |           _l__l_           I
+  }          [______]           I
+  ]            | | |            |
+  ]             ~ ~             |
+  |                            |
+   |                           |
+"#;
     let input = b"Hello fellow Rustaceans!";
     let width = 3;
 
@@ -214,6 +302,7 @@ fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
 #[test]
 fn multibyte_string() -> Result<(), ()> {
     #[cfg(not(feature = "clippy"))]
+    #[cfg(not(feature = "gopher"))]
     let expected = concat!(
         " ____________\n",
         "< 突然の死👻 >\n",
@@ -244,7 +333,26 @@ fn multibyte_string() -> Result<(), ()> {
            \___/
 "#
     );
-
+    #[cfg(feature = "gopher")]
+    let expected = concat!(
+        " ____________\n",
+        "< 突然の死👻 >\n",
+        " ------------\n",
+        r#"      \
+       \
+         ,_---~~~~~----._
+  _,,_,*^____      _____``*g*\"*,
+ / __/ /'     ^.  /      \ ^@q   f
+[  @f | @))    |  | @))   l  0 _/
+ \`/   \~____ / __ \_____/    \
+  |           _l__l_           I
+  }          [______]           I
+  ]            | | |            |
+  ]             ~ ~             |
+  |                            |
+   |                           |
+"#
+    );
     let input = "突然の死👻";
     let width = DEFAULT_WIDTH;
 

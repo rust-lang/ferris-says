@@ -26,6 +26,7 @@ name = "ferris_says"
 
 [features]
 clippy = []
+gopher = []
 
 [dependencies]
 smallvec = "0.4"

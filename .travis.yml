@@ -17,4 +17,6 @@ script:
 - cargo test
 - cargo build --features clippy
 - cargo test --features clippy
+- cargo build --features gopher
+- cargo test --features gopher
 - cargo doc

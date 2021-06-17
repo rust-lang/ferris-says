@@ -13,6 +13,7 @@ use unicode_width::UnicodeWidthStr;
 const ENDSL: &[u8] = b"| ";
 const ENDSR: &[u8] = b" |\n";
 #[cfg(not(feature = "clippy"))]
+#[cfg(not(feature = "gopher"))]
 const FERRIS: &[u8] = br#"
         \
          \
@@ -35,6 +36,23 @@ const CLIPPY: &[u8] = br#"
            || ||
            |\_/|
            \___/
+"#;
+
+#[cfg(feature = "gopher")]
+const GOPHER: &[u8] = br#"
+      \
+       \
+         ,_---~~~~~----._
+  _,,_,*^____      _____``*g*\"*,
+ / __/ /'     ^.  /      \ ^@q   f
+[  @f | @))    |  | @))   l  0 _/
+ \`/   \~____ / __ \_____/    \
+  |           _l__l_           I
+  }          [______]           I
+  ]            | | |            |
+  ]             ~ ~             |
+  |                            |
+   |                           |
 "#;
 const NEWLINE: u8 = b'\n';
 const DASH: u8 = b'-';
@@ -141,7 +159,10 @@ where
     write_buffer.extend_from_slice(&bottom_bar_buffer);
     #[cfg(feature = "clippy")]
     write_buffer.extend_from_slice(CLIPPY);
+    #[cfg(feature = "gopher")]
+    write_buffer.extend_from_slice(GOPHER);
     #[cfg(not(feature = "clippy"))]
+    #[cfg(not(feature = "gopher"))]
     write_buffer.extend_from_slice(FERRIS);
     writer.write_all(&write_buffer)?;
 
