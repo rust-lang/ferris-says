@@ -3,6 +3,19 @@ name = "fsays"
 version = "0.1.0"
 authors = ["Michael Gattozzi <mgattozzi@gmail.com>"]
 edition = "2018"
+description = "A Rust flavored replacement for the classic cowsay"
+documentation = "https://docs.rs/ferris-says"
+homepage = "https://github.com/mgattozzi/ferris-says"
+repository = "https://github.com/mgattozzi/ferris-says"
+keywords = ["ferris", "cowsay", "print", "fsays", "rustacean"]
+categories = [
+  "text-processing",
+  "visualization",
+  "rendering",
+  "command-line-utilities",
+  "value-formatting"
+]
+license = "MIT/Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
