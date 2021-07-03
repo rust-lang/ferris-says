@@ -24,6 +24,11 @@ appveyor = { repository = "mgattozzi/ferris-says", branch = "master", service = 
 [lib]
 name = "ferris_says"
 
+[[bin]]
+name = "fsays"
+path = "fsays/src/main.rs"
+
+
 [features]
 clippy = []
 
