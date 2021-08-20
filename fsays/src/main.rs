@@ -66,12 +66,27 @@ fn run() -> Result<()> {
                 .multiple(true)
                 .hidden(true),
         )
+        .arg(
+            Arg::with_name("SPEECH")
+                .long("speech")
+                .short("s")
+                .help("Set custom speech mode")
+                .takes_value(true)
+                .default_value("say")
+                .possible_values(&["say", "think"])
+        )
         .get_matches();
 
     let width = args.value_of("WIDTH").unwrap().parse().chain_err(|| ARGS)?;
 
     let stdin = stdin();
     let stdout = stdout();
+
+    let mode = match args.value_of("SPEECH").unwrap() {
+        "say" => SpeechModes::SAY,
+        "think" => SpeechModes::THINK,
+        _ => SpeechModes::SAY
+    };
 
     let mut writer = BufWriter::new(stdout.lock());
 
@@ -93,14 +108,19 @@ fn run() -> Result<()> {
             })
             .collect::<Vec<Result<Vec<u8>>>>();
         for i in reader {
-            say(&i?, width, &mut writer).chain_err(|| STDOUT)?;
+            match mode {
+                SpeechModes::SAY => say(&i?, width, &mut writer).chain_err(|| STDOUT)?,
+                SpeechModes::THINK => think(&i?, width, &mut writer).chain_err(|| STDOUT)?,
+            }
         }
 
         Ok(())
     } else if let Some(other_args) = args.values_of("TEXT") {
         let s = other_args.collect::<Vec<&str>>().join(" ");
-        say(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?;
-
+        match mode {
+            SpeechModes::SAY => say(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?,
+            SpeechModes::THINK => think(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?,
+        }
         Ok(())
     } else {
         let reader = BufReader::new(stdin.lock()).bytes().fold(
@@ -114,7 +134,10 @@ fn run() -> Result<()> {
                 }
             },
         )?;
-        say(&reader, width, &mut writer).chain_err(|| STDOUT)?;
+        match mode {
+            SpeechModes::SAY => say(&reader, width, &mut writer).chain_err(|| STDOUT)?,
+            SpeechModes::THINK => think(&reader, width, &mut writer).chain_err(|| STDOUT)?,
+        }
 
         Ok(())
     }

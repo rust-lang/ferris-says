@@ -9,13 +9,16 @@ use std::str;
 use textwrap::fill;
 use unicode_width::UnicodeWidthStr;
 
+pub enum SpeechModes {
+    THINK,
+    SAY,
+}
+
 // Constants! :D
 const ENDSL: &[u8] = b"| ";
 const ENDSR: &[u8] = b" |\n";
 #[cfg(not(feature = "clippy"))]
 const FERRIS: &[u8] = br#"
-        \
-         \
             _~^~^~_
         \) /  o o  \ (/
           '_   -   _'
@@ -24,8 +27,6 @@ const FERRIS: &[u8] = br#"
 
 #[cfg(feature = "clippy")]
 const CLIPPY: &[u8] = br#"
-        \
-         \
             __
            /  \
            |  |
@@ -36,6 +37,12 @@ const CLIPPY: &[u8] = br#"
            |\_/|
            \___/
 "#;
+const SPEECH_BUBBLE: &[u8] = br#"
+        \
+         \"#;
+const THOUGHT_BUBBLE: &[u8] = br#"
+        o
+         o"#;
 const NEWLINE: u8 = b'\n';
 const DASH: u8 = b'-';
 const UNDERSCORE: u8 = b'_';
@@ -84,6 +91,58 @@ const BUFSIZE: usize = 2048;
 /// ```
 
 pub fn say<W>(input: &[u8], max_width: usize, writer: &mut W) -> Result<()>
+where
+    W: Write,
+{
+    perform(input, max_width, writer, SpeechModes::SAY)
+}
+
+/// Print out Ferris thinking something
+///
+/// `input` is a slice of bytes that you want to be written out to somewhere
+///
+/// `max_width` is the maximum width of a line of text before it is wrapped
+///
+/// `writer` is anywhere that can be written to using the Writer trait like
+/// STDOUT or STDERR
+///
+/// # Example
+///
+/// The following bit of code will write the byte string to STDOUT
+///
+/// ```rust
+/// use ferris_says::*;
+/// use std::io::{ stdout, BufWriter };
+///
+/// let stdout = stdout();
+/// let out = b"Hello fellow Rustaceans!";
+/// let width = 24;
+///
+/// let mut writer = BufWriter::new(stdout.lock());
+/// think(out, width, &mut writer).unwrap();
+/// ```
+///
+/// This will print out:
+///
+/// ```plain
+///  __________________________
+/// < Hello fellow Rustaceans! >
+///  --------------------------
+///         o
+///          o
+///             _~^~^~_
+///         \) /  o o  \ (/
+///           '_   -   _'
+///           / '-----' \
+/// ```
+pub fn think<W>(input: &[u8], max_width: usize, writer: &mut W) -> Result<()>
+where
+    W: Write,
+{
+    perform(input, max_width, writer, SpeechModes::THINK)
+}
+
+pub fn perform<W>(input: &[u8], max_width: usize, writer: &mut W, mode: SpeechModes) -> Result<()>
 where
     W: Write,
 {
@@ -139,6 +198,10 @@ where
     }
 
     write_buffer.extend_from_slice(&bottom_bar_buffer);
+    match mode {
+        SpeechModes::SAY =>  write_buffer.extend_from_slice(SPEECH_BUBBLE),
+        SpeechModes::THINK => write_buffer.extend_from_slice(THOUGHT_BUBBLE),
+    }
     #[cfg(feature = "clippy")]
     write_buffer.extend_from_slice(CLIPPY);
     #[cfg(not(feature = "clippy"))]
