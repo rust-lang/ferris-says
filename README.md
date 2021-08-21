@@ -54,7 +54,7 @@ This will print out this when run:
           / '-----' \
 ```
 
-You can also use `think` instead of `say` to get a though bubble instead of a speech bubble.
+You can also use `think` instead of `say` to make Ferris think something.
 There is also the `perform` function where you can pass the speech mode and the eyes.
 
 ## How to use the binary
