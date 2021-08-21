@@ -83,9 +83,9 @@ fn run() -> Result<()> {
     let stdout = stdout();
 
     let mode = match args.value_of("SPEECH").unwrap() {
-        "say" => SpeechModes::SAY,
-        "think" => SpeechModes::THINK,
-        _ => SpeechModes::SAY
+        "say" => SpeechModes::Say,
+        "think" => SpeechModes::Think,
+        _ => SpeechModes::Say
     };
 
     let mut writer = BufWriter::new(stdout.lock());
@@ -109,8 +109,8 @@ fn run() -> Result<()> {
             .collect::<Vec<Result<Vec<u8>>>>();
         for i in reader {
             match mode {
-                SpeechModes::SAY => say(&i?, width, &mut writer).chain_err(|| STDOUT)?,
-                SpeechModes::THINK => think(&i?, width, &mut writer).chain_err(|| STDOUT)?,
+                SpeechModes::Say => say(&i?, width, &mut writer).chain_err(|| STDOUT)?,
+                SpeechModes::Think => think(&i?, width, &mut writer).chain_err(|| STDOUT)?,
             }
         }
 
@@ -118,8 +118,8 @@ fn run() -> Result<()> {
     } else if let Some(other_args) = args.values_of("TEXT") {
         let s = other_args.collect::<Vec<&str>>().join(" ");
         match mode {
-            SpeechModes::SAY => say(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?,
-            SpeechModes::THINK => think(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?,
+            SpeechModes::Say => say(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?,
+            SpeechModes::Think => think(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?,
         }
         Ok(())
     } else {
@@ -135,8 +135,8 @@ fn run() -> Result<()> {
             },
         )?;
         match mode {
-            SpeechModes::SAY => say(&reader, width, &mut writer).chain_err(|| STDOUT)?,
-            SpeechModes::THINK => think(&reader, width, &mut writer).chain_err(|| STDOUT)?,
+            SpeechModes::Say => say(&reader, width, &mut writer).chain_err(|| STDOUT)?,
+            SpeechModes::Think => think(&reader, width, &mut writer).chain_err(|| STDOUT)?,
         }
 
         Ok(())

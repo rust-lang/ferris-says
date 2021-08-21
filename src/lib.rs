@@ -10,8 +10,8 @@ use textwrap::fill;
 use unicode_width::UnicodeWidthStr;
 
 pub enum SpeechModes {
-    THINK,
-    SAY,
+    Think,
+    Say,
 }
 
 // Constants! :D
@@ -94,7 +94,7 @@ pub fn say<W>(input: &[u8], max_width: usize, writer: &mut W) -> Result<()>
 where
     W: Write,
 {
-    perform(input, max_width, writer, SpeechModes::SAY)
+    perform(input, max_width, writer, SpeechModes::Say)
 }
 
 /// Print out Ferris thinking something
@@ -139,7 +139,7 @@ pub fn think<W>(input: &[u8], max_width: usize, writer: &mut W) -> Result<()>
 where
     W: Write,
 {
-    perform(input, max_width, writer, SpeechModes::THINK)
+    perform(input, max_width, writer, SpeechModes::Think)
 }
 
 pub fn perform<W>(input: &[u8], max_width: usize, writer: &mut W, mode: SpeechModes) -> Result<()>
@@ -199,8 +199,8 @@ where
 
     write_buffer.extend_from_slice(&bottom_bar_buffer);
     match mode {
-        SpeechModes::SAY =>  write_buffer.extend_from_slice(SPEECH_BUBBLE),
-        SpeechModes::THINK => write_buffer.extend_from_slice(THOUGHT_BUBBLE),
+        SpeechModes::Say =>  write_buffer.extend_from_slice(SPEECH_BUBBLE),
+        SpeechModes::Think => write_buffer.extend_from_slice(THOUGHT_BUBBLE),
     }
     #[cfg(feature = "clippy")]
     write_buffer.extend_from_slice(CLIPPY);

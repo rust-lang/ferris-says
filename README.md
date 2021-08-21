@@ -54,6 +54,8 @@ This will print out this when run:
           / '-----' \
 ```
 
+You can also use `think` instead of `say` to get a though bubble instead of a speech bubble.
+
 ## How to use the binary
 
 The binary version is called `fsays`. It reads input from `stdin` and prints it
@@ -98,7 +100,8 @@ will result in the following output:
           / '-----' \
 ```
 
-You can also use multiple files as input by using the `-f`/`--files` flag!
+You can select the think speech mode by supplying `-s think` and you
+can also use multiple files as input by using the `-f`/`--files` flag!
 
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.

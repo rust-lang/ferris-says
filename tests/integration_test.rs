@@ -5,40 +5,21 @@ use ferris_says::{say, think, SpeechModes};
 // Default width when running the binary
 const DEFAULT_WIDTH: usize = 40;
 
-#[test]
-fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
-    //Hello fellow Rustaceans!
-    #[cfg(not(feature = "clippy"))]
-    let expected_say = br#"
- __________________________
-< Hello fellow Rustaceans! >
- --------------------------
-        \
-         \
+const SPEECH_BUBBLE: &str = r#"        \
+         \"#;
+const THOUGHT_BUBBLE: &str = r#"        o
+         o"#;
+
+#[cfg(not(feature = "clippy"))]
+const FERRIS: &str = r#"
             _~^~^~_
         \) /  o o  \ (/
           '_   -   _'
           / '-----' \
 "#;
-    #[cfg(not(feature = "clippy"))]
-    let expected_think = br#"
- __________________________
-< Hello fellow Rustaceans! >
- --------------------------
-        o
-         o
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#;
-    #[cfg(feature = "clippy")]
-    let expected = br#"
- __________________________
-< Hello fellow Rustaceans! >
- --------------------------
-        \
-         \
+
+#[cfg (feature = "clippy")]
+const CLIPPY: &str = r#"
             __
            /  \
            |  |
@@ -50,130 +31,85 @@ fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
            \___/
 "#;
 
+#[test]
+fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
+    //Hello fellow Rustaceans!
+    let speech = String::from(concat!(
+        " __________________________\n",
+        "< Hello fellow Rustaceans! >\n",
+        " --------------------------\n",
+    ));
+    #[cfg(not(feature = "clippy"))]
+    let expected_say = speech.clone() + SPEECH_BUBBLE + FERRIS;
+    #[cfg(not(feature = "clippy"))]
+    let expected_think = speech + THOUGHT_BUBBLE + FERRIS;
+
+    #[cfg(feature = "clippy")]
+    let expected_say = speech.clone() + SPEECH_BUBBLE + CLIPPY;
+    #[cfg(feature = "clippy")]
+    let expected_think = speech + THOUGHT_BUBBLE + CLIPPY;
+
     let input = b"Hello fellow Rustaceans!";
     let width = 24;
 
-    compare_strings(input, width, &expected_say[1..], SpeechModes::SAY);
-    compare_strings(input, width, &expected_think[1..], SpeechModes::THINK);
+    compare_strings(input, width, &expected_say.as_bytes(), SpeechModes::Say);
+    compare_strings(input, width, &expected_think.as_bytes(), SpeechModes::Think);
     Ok(())
 }
 
 #[test]
 fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
     //Hello fellow Rustaceans!
+    let speech = String::from(concat!(
+        " ______________\n",
+        "/ Hello fellow \\\n",
+        "\\ Rustaceans!  /\n",
+        " --------------\n"
+    ));
     #[cfg(not(feature = "clippy"))]
-    let expected_say = br#"
- ______________
-/ Hello fellow \
-\ Rustaceans!  /
- --------------
-        \
-         \
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#;
+    let expected_say = speech.clone() + SPEECH_BUBBLE + FERRIS;
     #[cfg(not(feature = "clippy"))]
-    let expected_think = br#"
- ______________
-/ Hello fellow \
-\ Rustaceans!  /
- --------------
-        o
-         o
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#;
+    let expected_think = speech + THOUGHT_BUBBLE + FERRIS;
+
     #[cfg(feature = "clippy")]
-    let expected = br#"
- ______________
-/ Hello fellow \
-\ Rustaceans!  /
- --------------
-        \
-         \
-            __
-           /  \
-           |  |
-           @  @
-           |  |
-           || |/
-           || ||
-           |\_/|
-           \___/
-"#;
+    let expected_say = speech.clone() + SPEECH_BUBBLE + CLIPPY;
+    #[cfg(feature = "clippy")]
+    let expected_think = speech + THOUGHT_BUBBLE + CLIPPY;
 
     let input = b"Hello fellow Rustaceans!";
     let width = 12;
 
-    compare_strings(input, width, &expected_say[1..], SpeechModes::SAY);
-    compare_strings(input, width, &expected_think[1..], SpeechModes::THINK);
+    compare_strings(input, width, &expected_say.as_bytes(), SpeechModes::Say);
+    compare_strings(input, width, &expected_think.as_bytes(), SpeechModes::Think);
 
     Ok(())
 }
 
 #[test]
 fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
-    //Hello fellow Rustaceans!
+    let speech = String::from(concat!(
+        " ________\n",
+        "/ Hello  \\\n",
+        "| fellow |\n",
+        "| Rustac |\n",
+        "\\ eans!  /\n",
+        " --------\n"
+    ));
     #[cfg(not(feature = "clippy"))]
-    let expected_say = br#"
- ________
-/ Hello  \
-| fellow |
-| Rustac |
-\ eans!  /
- --------
-        \
-         \
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#;
+    let expected_say = speech.clone() + SPEECH_BUBBLE + FERRIS;
     #[cfg(not(feature = "clippy"))]
-    let expected_think = br#"
- ________
-/ Hello  \
-| fellow |
-| Rustac |
-\ eans!  /
- --------
-        o
-         o
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#;
+    let expected_think = speech + THOUGHT_BUBBLE + FERRIS;
+
     #[cfg(feature = "clippy")]
-    let expected = br#"
- ________
-/ Hello  \
-| fellow |
-| Rustac |
-\ eans!  /
- --------
-        \
-         \
-            __
-           /  \
-           |  |
-           @  @
-           |  |
-           || |/
-           || ||
-           |\_/|
-           \___/
-"#;
+    let expected_say = speech.clone() + SPEECH_BUBBLE + CLIPPY;
+    #[cfg(feature = "clippy")]
+    let expected_think = speech + THOUGHT_BUBBLE + CLIPPY;
 
     let input = b"Hello fellow Rustaceans!";
     let width = 6;
 
-    compare_strings(input, width, &expected_say[1..], SpeechModes::SAY);
-    compare_strings(input, width, &expected_think[1..], SpeechModes::THINK);
+    compare_strings(input, width, &expected_say.as_bytes(), SpeechModes::Say);
+    compare_strings(input, width, &expected_think.as_bytes(), SpeechModes::Think);
 
     Ok(())
 }
@@ -181,130 +117,60 @@ fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
 #[test]
 fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
     //Hello fellow Rustaceans!
+    let speech = String::from(concat!(
+        " _____\n",
+        "/ Hel \\\n",
+        "| lo  |\n",
+        "| fel |\n",
+        "| low |\n",
+        "| Rus |\n",
+        "| tac |\n",
+        "| ean |\n",
+        "\\ s!  /\n",
+        " -----\n"
+    ));
     #[cfg(not(feature = "clippy"))]
-    let expected_say = br#"
- _____
-/ Hel \
-| lo  |
-| fel |
-| low |
-| Rus |
-| tac |
-| ean |
-\ s!  /
- -----
-        \
-         \
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#;
+    let expected_say = speech.clone() + SPEECH_BUBBLE + FERRIS;
     #[cfg(not(feature = "clippy"))]
-    let expected_think = br#"
- _____
-/ Hel \
-| lo  |
-| fel |
-| low |
-| Rus |
-| tac |
-| ean |
-\ s!  /
- -----
-        o
-         o
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#;
+    let expected_think = speech + THOUGHT_BUBBLE + FERRIS;
+
     #[cfg(feature = "clippy")]
-    let expected = br#"
- _____
-/ Hel \
-| lo  |
-| fel |
-| low |
-| Rus |
-| tac |
-| ean |
-\ s!  /
- -----
-        \
-         \
-            __
-           /  \
-           |  |
-           @  @
-           |  |
-           || |/
-           || ||
-           |\_/|
-           \___/
-"#;
+    let expected_say = speech.clone() + SPEECH_BUBBLE + CLIPPY;
+    #[cfg(feature = "clippy")]
+    let expected_think = speech + THOUGHT_BUBBLE + CLIPPY;
 
     let input = b"Hello fellow Rustaceans!";
     let width = 3;
 
-    compare_strings(input, width, &expected_say[1..], SpeechModes::SAY);
-    compare_strings(input, width, &expected_think[1..], SpeechModes::THINK);
+    compare_strings(input, width, &expected_say.as_bytes(), SpeechModes::Say);
+    compare_strings(input, width, &expected_think.as_bytes(), SpeechModes::Think);
 
     Ok(())
 }
 
 #[test]
 fn multibyte_string() -> Result<(), ()> {
-    #[cfg(not(feature = "clippy"))]
-    let expected_say = concat!(
+    //Hello fellow Rustaceans!
+    let speech = String::from(concat!(
         " ____________\n",
         "< 突然の死👻 >\n",
-        " ------------\n",
-        r#"        \
-         \
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#
-    );
+        " ------------\n"
+    ));
     #[cfg(not(feature = "clippy"))]
-    let expected_think = concat!(
-        " ____________\n",
-        "< 突然の死👻 >\n",
-        " ------------\n",
-        r#"        o
-         o
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#
-    );
+    let expected_say = speech.clone() + SPEECH_BUBBLE + FERRIS;
+    #[cfg(not(feature = "clippy"))]
+    let expected_think = speech + THOUGHT_BUBBLE + FERRIS;
+
     #[cfg(feature = "clippy")]
-    let expected = concat!(
-        " ____________\n",
-        "< 突然の死👻 >\n",
-        " ------------\n",
-        r#"        \
-         \
-            __
-           /  \
-           |  |
-           @  @
-           |  |
-           || |/
-           || ||
-           |\_/|
-           \___/
-"#
-    );
+    let expected_say = speech.clone() + SPEECH_BUBBLE + CLIPPY;
+    #[cfg(feature = "clippy")]
+    let expected_think = speech + THOUGHT_BUBBLE + CLIPPY;
 
     let input = "突然の死👻";
     let width = DEFAULT_WIDTH;
 
-    compare_strings(input.as_bytes(), width, &expected_say.as_bytes(), SpeechModes::SAY);
-    compare_strings(input.as_bytes(), width, &expected_think.as_bytes(), SpeechModes::THINK);
+    compare_strings(input.as_bytes(), width, &expected_say.as_bytes(), SpeechModes::Say);
+    compare_strings(input.as_bytes(), width, &expected_think.as_bytes(), SpeechModes::Think);
 
     Ok(())
 }
@@ -312,10 +178,10 @@ fn multibyte_string() -> Result<(), ()> {
 fn compare_strings(input: &[u8], width: usize, expected: &[u8], mode: SpeechModes) {
     let mut vec = Vec::new();
     match mode {
-        SpeechModes::SAY => {
+        SpeechModes::Say => {
             say(input, width, &mut vec).unwrap();
         }
-        SpeechModes::THINK => {
+        SpeechModes::Think => {
             think(input, width, &mut vec).unwrap();
         }
     }
