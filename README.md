@@ -36,7 +36,7 @@ fn main() {
     let width = 24;
 
     let mut writer = BufWriter::new(stdout());
-    say(out, width, &mut writer).unwrap();
+    say(out, width, &mut writer, &Eyes::RegularEyes).unwrap();
 }
 ```
 
@@ -55,6 +55,7 @@ This will print out this when run:
 ```
 
 You can also use `think` instead of `say` to get a though bubble instead of a speech bubble.
+There is also the `perform` function where you can pass the speech mode and the eyes.
 
 ## How to use the binary
 
@@ -100,8 +101,9 @@ will result in the following output:
           / '-----' \
 ```
 
-You can select the think speech mode by supplying `-s think` and you
-can also use multiple files as input by using the `-f`/`--files` flag!
+You can select the think speech mode by supplying `-s think`. You can customize the eyes
+as well, for example by passing `-e happy` to the command.
+You can also use multiple files as input by using the `-f`/`--files` flag!
 
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.

@@ -70,10 +70,22 @@ fn run() -> Result<()> {
             Arg::with_name("SPEECH")
                 .long("speech")
                 .short("s")
-                .help("Set custom speech mode")
+                .help("Set speech mode")
                 .takes_value(true)
                 .default_value("say")
                 .possible_values(&["say", "think"])
+        )
+        .arg(
+            Arg::with_name("EYES")
+                .long("eyes")
+                .short("e")
+                .help("Set eyes")
+                .takes_value(true)
+                .default_value("regular")
+                .possible_values(&[
+                    "regular", "greedy", "happy", "tired", "dead", "youth",
+                    "paranoid", "crying"
+                ])
         )
         .get_matches();
 
@@ -87,6 +99,20 @@ fn run() -> Result<()> {
         "think" => SpeechModes::Think,
         _ => SpeechModes::Say
     };
+
+    let eyes = match args.value_of("EYES").unwrap() {
+        "regular" => Eyes::RegularEyes,
+        "greedy" => Eyes::GreedyEyes,
+        "happy" => Eyes::HappyEyes,
+        "tired" => Eyes::TiredEyes,
+        "dead" => Eyes::DeadEyes,
+        "youth" => Eyes::YouthfulEyes,
+        "paranoid" => Eyes::ParanoidEyes,
+        "crying" => Eyes::CryingEyes,
+        _ => Eyes::RegularEyes
+    };
+
+    let cfg = FerrisConfig { mode, eyes };
 
     let mut writer = BufWriter::new(stdout.lock());
 
@@ -108,19 +134,13 @@ fn run() -> Result<()> {
             })
             .collect::<Vec<Result<Vec<u8>>>>();
         for i in reader {
-            match mode {
-                SpeechModes::Say => say(&i?, width, &mut writer).chain_err(|| STDOUT)?,
-                SpeechModes::Think => think(&i?, width, &mut writer).chain_err(|| STDOUT)?,
-            }
+            perform(&i?, width, &mut writer, &cfg).chain_err(|| STDOUT)?
         }
 
         Ok(())
     } else if let Some(other_args) = args.values_of("TEXT") {
         let s = other_args.collect::<Vec<&str>>().join(" ");
-        match mode {
-            SpeechModes::Say => say(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?,
-            SpeechModes::Think => think(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?,
-        }
+        perform(s.as_bytes(), width, &mut writer, &cfg).chain_err(|| STDOUT)?;
         Ok(())
     } else {
         let reader = BufReader::new(stdin.lock()).bytes().fold(
@@ -134,10 +154,7 @@ fn run() -> Result<()> {
                 }
             },
         )?;
-        match mode {
-            SpeechModes::Say => say(&reader, width, &mut writer).chain_err(|| STDOUT)?,
-            SpeechModes::Think => think(&reader, width, &mut writer).chain_err(|| STDOUT)?,
-        }
+        perform(&reader, width, &mut writer, &cfg).chain_err(|| STDOUT)?;
 
         Ok(())
     }

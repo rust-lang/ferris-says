@@ -9,40 +9,73 @@ use std::str;
 use textwrap::fill;
 use unicode_width::UnicodeWidthStr;
 
+#[derive(Copy, Clone)]
 pub enum SpeechModes {
     Think,
     Say,
 }
 
+#[derive(Copy, Clone)]
+pub enum Eyes {
+    RegularEyes,
+    GreedyEyes,
+    YouthfulEyes,
+    ParanoidEyes,
+    DeadEyes,
+    TiredEyes,
+    CryingEyes,
+    HappyEyes
+}
+
+pub struct FerrisConfig {
+    pub mode: SpeechModes,
+    pub eyes: Eyes
+}
+
 // Constants! :D
 const ENDSL: &[u8] = b"| ";
 const ENDSR: &[u8] = b" |\n";
+const REGULAR_EYES: &[u8] = b"o";
+const GREEDY_EYES: &[u8] = b"$";
+const YOUTHFUL_EYES: &[u8] = b".";
+const PARANOID_EYES: &[u8] = b"@";
+const DEAD_EYES: &[u8] = b"X";
+const TIRED_EYES: &[u8] = b"-";
+const CRYING_EYES: &[u8] = b"T";
+const HAPPY_EYES: &[u8] = b"^";
+
 #[cfg(not(feature = "clippy"))]
-const FERRIS: &[u8] = br#"
+const FERRIS_TOP: &[u8] = br#"
             _~^~^~_
-        \) /  o o  \ (/
+        \) /  "#;
+#[cfg(not(feature = "clippy"))]
+const FERRIS_BOTTOM: &[u8] = br#"  \ (/
           '_   -   _'
           / '-----' \
 "#;
 
 #[cfg(feature = "clippy")]
-const CLIPPY: &[u8] = br#"
+const CLIPPY_TOP: &[u8] = br#"
             __
            /  \
            |  |
-           @  @
+           "#;
+#[cfg(feature = "clippy")]
+const CLIPPY_BOTTOM: &[u8] = br#"
            |  |
            || |/
            || ||
            |\_/|
            \___/
 "#;
+
 const SPEECH_BUBBLE: &[u8] = br#"
         \
          \"#;
 const THOUGHT_BUBBLE: &[u8] = br#"
         o
          o"#;
+
 const NEWLINE: u8 = b'\n';
 const DASH: u8 = b'-';
 const UNDERSCORE: u8 = b'_';
@@ -60,6 +93,8 @@ const BUFSIZE: usize = 2048;
 /// `writer` is anywhere that can be written to using the Writer trait like
 /// STDOUT or STDERR
 ///
+/// `eyes` Ferris has different moods
+///
 /// # Example
 ///
 /// The following bit of code will write the byte string to STDOUT
@@ -73,7 +108,7 @@ const BUFSIZE: usize = 2048;
 /// let width = 24;
 ///
 /// let mut writer = BufWriter::new(stdout.lock());
-/// say(out, width, &mut writer).unwrap();
+/// say(out, width, &mut writer, &Eyes::RegularEyes).unwrap();
 /// ```
 ///
 /// This will print out:
@@ -90,11 +125,15 @@ const BUFSIZE: usize = 2048;
 ///           / '-----' \
 /// ```
 
-pub fn say<W>(input: &[u8], max_width: usize, writer: &mut W) -> Result<()>
+pub fn say<W>(input: &[u8], max_width: usize, writer: &mut W, eyes: &Eyes) -> Result<()>
 where
     W: Write,
 {
-    perform(input, max_width, writer, SpeechModes::Say)
+    let cfg = FerrisConfig {
+        mode: SpeechModes::Say,
+        eyes: *eyes
+    };
+    perform(input, max_width, writer, &cfg)
 }
 
 /// Print out Ferris thinking something
@@ -105,6 +144,8 @@ where
 ///
 /// `writer` is anywhere that can be written to using the Writer trait like
 /// STDOUT or STDERR
+///
+/// `eyes` Ferris has different moods
 ///
 /// # Example
 ///
@@ -119,7 +160,7 @@ where
 /// let width = 24;
 ///
 /// let mut writer = BufWriter::new(stdout.lock());
-/// think(out, width, &mut writer).unwrap();
+/// think(out, width, &mut writer, &Eyes::RegularEyes).unwrap();
 /// ```
 ///
 /// This will print out:
@@ -135,14 +176,62 @@ where
 ///           '_   -   _'
 ///           / '-----' \
 /// ```
-pub fn think<W>(input: &[u8], max_width: usize, writer: &mut W) -> Result<()>
+pub fn think<W>(input: &[u8], max_width: usize, writer: &mut W, eyes: &Eyes) -> Result<()>
 where
     W: Write,
 {
-    perform(input, max_width, writer, SpeechModes::Think)
+    let cfg = FerrisConfig {
+        mode: SpeechModes::Think,
+        eyes: *eyes
+    };
+    perform(input, max_width, writer, &cfg)
 }
 
-pub fn perform<W>(input: &[u8], max_width: usize, writer: &mut W, mode: SpeechModes) -> Result<()>
+/// Let Ferris say or think something
+///
+/// `input` is a slice of bytes that you want to be written out to somewhere
+///
+/// `max_width` is the maximum width of a line of text before it is wrapped
+///
+/// `writer` is anywhere that can be written to using the Writer trait like
+/// STDOUT or STDERR
+///
+/// `cfg` Ferris can have different moods and also likes to think sometimes
+///
+/// # Example
+///
+/// The following bit of code will write the byte string to STDOUT
+///
+/// ```rust
+/// use ferris_says::*;
+/// use std::io::{ stdout, BufWriter };
+///
+/// let stdout = stdout();
+/// let out = b"Hello fellow Rustaceans!";
+/// let width = 24;
+///
+/// let mut writer = BufWriter::new(stdout.lock());
+/// let ferris_cfg = FerrisConfig {
+///     mode: SpeechModes::Think,
+///     eyes: Eyes::HappyEyes
+/// };
+/// perform(out, width, &mut writer, &ferris_cfg).unwrap();
+/// ```
+///
+/// This will print out:
+///
+/// ```plain
+///  __________________________
+/// < Hello fellow Rustaceans! >
+///  --------------------------
+///         o
+///          o
+///             _~^~^~_
+///         \) /  ^ ^  \ (/
+///           '_   -   _'
+///           / '-----' \
+/// ```
+pub fn perform<W>(input: &[u8], max_width: usize, writer: &mut W, cfg: &FerrisConfig) -> Result<()>
 where
     W: Write,
 {
@@ -198,14 +287,42 @@ where
     }
 
     write_buffer.extend_from_slice(&bottom_bar_buffer);
+    let FerrisConfig { mode, eyes } = cfg;
+
     match mode {
         SpeechModes::Say =>  write_buffer.extend_from_slice(SPEECH_BUBBLE),
         SpeechModes::Think => write_buffer.extend_from_slice(THOUGHT_BUBBLE),
     }
+
+    let eye = match eyes {
+        Eyes::CryingEyes => CRYING_EYES,
+        Eyes::DeadEyes => DEAD_EYES,
+        Eyes::RegularEyes => REGULAR_EYES,
+        Eyes::GreedyEyes => GREEDY_EYES,
+        Eyes::ParanoidEyes => PARANOID_EYES,
+        Eyes::YouthfulEyes => YOUTHFUL_EYES,
+        Eyes::TiredEyes => TIRED_EYES,
+        Eyes::HappyEyes => HAPPY_EYES,
+    };
+
     #[cfg(feature = "clippy")]
-    write_buffer.extend_from_slice(CLIPPY);
+    let eye_gap = b"  ";
     #[cfg(not(feature = "clippy"))]
-    write_buffer.extend_from_slice(FERRIS);
+    let eye_gap = b" ";
+
+    #[cfg(feature = "clippy")]
+    write_buffer.extend_from_slice(CLIPPY_TOP);
+    #[cfg(not(feature = "clippy"))]
+    write_buffer.extend_from_slice(FERRIS_TOP);
+
+    write_buffer.extend_from_slice(eye);
+    write_buffer.extend_from_slice(eye_gap);
+    write_buffer.extend_from_slice(eye);
+
+    #[cfg(feature = "clippy")]
+    write_buffer.extend_from_slice(CLIPPY_BOTTOM);
+    #[cfg(not(feature = "clippy"))]
+    write_buffer.extend_from_slice(FERRIS_BOTTOM);
     writer.write_all(&write_buffer)?;
 
     Ok(())
