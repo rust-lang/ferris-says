@@ -56,8 +56,13 @@ This will print out this when run:
 
 ## How to use the binary
 
-The binary version is called `fsays`. It reads input from `stdin` and prints it
-out to the console.
+The binary version is called `fsays` and can be installed with `cargo install`:
+
+```bash
+cargo install fsays
+```
+
+It reads input from `stdin` and prints it out to the console.
 
 ```bash
 fsays 'Hello fellow Rustaceans!'
