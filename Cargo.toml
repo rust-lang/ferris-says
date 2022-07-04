@@ -28,7 +28,7 @@ name = "ferris_says"
 clippy = []
 
 [dependencies]
-smallvec = "0.4"
+smallvec = "1.9.0"
 textwrap = "0.13"
 unicode-width = "0.1.7"
 
