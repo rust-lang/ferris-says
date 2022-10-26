@@ -65,8 +65,8 @@ const BUFSIZE: usize = 2048;
 /// let out = b"Hello fellow Rustaceans!";
 /// let width = 24;
 ///
-/// let mut writer = BufWriter::new(stdout.lock());
-/// say(out, width, &mut writer).unwrap();
+/// let writer = BufWriter::new(stdout.lock());
+/// say(out, width, writer).unwrap();
 /// ```
 ///
 /// This will print out:
@@ -83,7 +83,7 @@ const BUFSIZE: usize = 2048;
 ///           / '-----' \
 /// ```
 
-pub fn say<W>(input: &[u8], max_width: usize, writer: &mut W) -> Result<()>
+pub fn say<W>(input: &[u8], max_width: usize, mut writer: W) -> Result<()>
 where
     W: Write,
 {
