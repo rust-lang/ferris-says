@@ -4,8 +4,6 @@ extern crate unicode_width;
 
 use smallvec::*;
 use std::io::{Result, Write};
-use std::iter::repeat;
-use std::str;
 use textwrap::fill;
 use unicode_width::UnicodeWidthStr;
 
@@ -39,6 +37,7 @@ const CLIPPY: &[u8] = br#"
 const NEWLINE: u8 = b'\n';
 const DASH: u8 = b'-';
 const UNDERSCORE: u8 = b'_';
+const SPACE: u8 = b' ';
 
 // A decent number for SmallVec's Buffer Size, not too large
 // but also big enough for most inputs
@@ -82,6 +81,7 @@ const BUFSIZE: usize = 2048;
 ///           '_   -   _'
 ///           / '-----' \
 /// ```
+<<<<<<< HEAD
 
 pub fn say<W>(input: &str, max_width: usize, mut writer: W) -> Result<()>
 where
@@ -98,21 +98,20 @@ where
     let line_count = lines.len();
     let actual_width = longest_line(&lines);
 
-    let mut top_bar_buffer: Vec<u8> = repeat(UNDERSCORE).take(actual_width + 2).collect();
-    top_bar_buffer.insert(0, b' ');
-
-    let mut bottom_bar_buffer: Vec<u8> = repeat(DASH).take(actual_width + 2).collect();
-    bottom_bar_buffer.insert(0, b' ');
-
-    write_buffer.extend_from_slice(&top_bar_buffer);
+    // top box border
+    write_buffer.push(SPACE);
+    for _ in 0..(actual_width + 2) {
+        write_buffer.push(UNDERSCORE);
+    }
     write_buffer.push(NEWLINE);
 
-    for (current_line, line) in lines.into_iter().enumerate() {
+    // inner message
+    for (i, line) in lines.into_iter().enumerate() {
         if line_count == 1 {
             write_buffer.extend_from_slice(b"< ");
-        } else if current_line == 0 {
+        } else if i == 0 {
             write_buffer.extend_from_slice(b"/ ");
-        } else if current_line == line_count - 1 {
+        } else if i == line_count - 1 {
             write_buffer.extend_from_slice(b"\\ ");
         } else {
             write_buffer.extend_from_slice(ENDSL);
@@ -120,29 +119,34 @@ where
 
         let line_len = UnicodeWidthStr::width(line);
         write_buffer.extend_from_slice(line.as_bytes());
-        for _i in line_len..actual_width {
-            write_buffer.extend_from_slice(b" ");
+        for _ in line_len..actual_width {
+            write_buffer.push(SPACE);
         }
 
         if line_count == 1 {
             write_buffer.extend_from_slice(b" >\n");
-        } else if current_line == 0 {
+        } else if i == 0 {
             write_buffer.extend_from_slice(b" \\\n");
-        } else if current_line == line_count - 1 {
+        } else if i == line_count - 1 {
             write_buffer.extend_from_slice(b" /\n");
         } else {
             write_buffer.extend_from_slice(ENDSR);
         }
     }
 
-    write_buffer.extend_from_slice(&bottom_bar_buffer);
+    // bottom box border
+    write_buffer.push(SPACE);
+    for _ in 0..(actual_width + 2) {
+        write_buffer.push(DASH);
+    }
+
+    // mascot
     #[cfg(feature = "clippy")]
     write_buffer.extend_from_slice(CLIPPY);
     #[cfg(not(feature = "clippy"))]
     write_buffer.extend_from_slice(FERRIS);
-    writer.write_all(&write_buffer)?;
 
-    Ok(())
+    writer.write_all(&write_buffer)
 }
 
 fn longest_line(lines: &[&str]) -> usize {
