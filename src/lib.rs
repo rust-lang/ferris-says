@@ -149,12 +149,9 @@ where
 }
 
 fn longest_line(lines: &[&str]) -> usize {
-    let mut max_width = 0;
-    for line in lines {
-        let line_width = UnicodeWidthStr::width(line.to_owned());
-        if line_width > max_width {
-            max_width = line_width;
-        }
-    }
-    max_width
+    lines
+        .iter()
+        .map(|line| UnicodeWidthStr::width(*line))
+        .max()
+        .unwrap_or(0)
 }
