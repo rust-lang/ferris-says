@@ -46,7 +46,7 @@ const BUFSIZE: usize = 2048;
 
 /// Print out Ferris saying something.
 ///
-/// `input` is a slice of bytes that you want to be written out to somewhere
+/// `input` is a string slice that you want to be written out to somewhere
 ///
 /// `max_width` is the maximum width of a line of text before it is wrapped
 ///
@@ -62,7 +62,7 @@ const BUFSIZE: usize = 2048;
 /// use std::io::{ stdout, BufWriter };
 ///
 /// let stdout = stdout();
-/// let out = b"Hello fellow Rustaceans!";
+/// let out = "Hello fellow Rustaceans!";
 /// let width = 24;
 ///
 /// let mut writer = BufWriter::new(stdout.lock());
@@ -83,7 +83,7 @@ const BUFSIZE: usize = 2048;
 ///           / '-----' \
 /// ```
 
-pub fn say<W>(input: &[u8], max_width: usize, writer: &mut W) -> Result<()>
+pub fn say<W>(input: &str, max_width: usize, writer: &mut W) -> Result<()>
 where
     W: Write,
 {
@@ -91,10 +91,7 @@ where
     let mut write_buffer = SmallVec::<[u8; BUFSIZE]>::new();
 
     // Let textwrap work its magic
-    let wrapped = fill(
-        str::from_utf8(input).map_err(|_| std::io::ErrorKind::InvalidData)?,
-        max_width,
-    );
+    let wrapped = fill(input, max_width);
 
     let lines: Vec<&str> = wrapped.lines().collect();
 

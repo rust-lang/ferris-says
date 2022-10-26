@@ -38,7 +38,7 @@ fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
            \___/
 "#;
 
-    let input = b"Hello fellow Rustaceans!";
+    let input = "Hello fellow Rustaceans!";
     let width = 24;
 
     let mut vec = Vec::new();
@@ -86,7 +86,7 @@ fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
            \___/
 "#;
 
-    let input = b"Hello fellow Rustaceans!";
+    let input = "Hello fellow Rustaceans!";
     let width = 12;
 
     let mut vec = Vec::new();
@@ -138,7 +138,7 @@ fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
            \___/
 "#;
 
-    let input = b"Hello fellow Rustaceans!";
+    let input = "Hello fellow Rustaceans!";
     let width = 6;
 
     let mut vec = Vec::new();
@@ -198,7 +198,7 @@ fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
            \___/
 "#;
 
-    let input = b"Hello fellow Rustaceans!";
+    let input = "Hello fellow Rustaceans!";
     let width = 3;
 
     let mut vec = Vec::new();
@@ -250,7 +250,7 @@ fn multibyte_string() -> Result<(), ()> {
 
     let mut vec = Vec::new();
 
-    say(input.as_bytes(), width, &mut vec).unwrap();
+    say(input, width, &mut vec).unwrap();
 
     let actual = std::str::from_utf8(&vec).unwrap();
 
