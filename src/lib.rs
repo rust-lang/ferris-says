@@ -81,8 +81,6 @@ const BUFSIZE: usize = 2048;
 ///           '_   -   _'
 ///           / '-----' \
 /// ```
-<<<<<<< HEAD
-
 pub fn say<W>(input: &str, max_width: usize, mut writer: W) -> Result<()>
 where
     W: Write,
