@@ -9,7 +9,7 @@ const DEFAULT_WIDTH: usize = 40;
 fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
     //Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
-    let expected = br#"
+    let expected = r#"
  __________________________
 < Hello fellow Rustaceans! >
  --------------------------
@@ -21,7 +21,7 @@ fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
           / '-----' \
 "#;
     #[cfg(feature = "clippy")]
-    let expected = br#"
+    let expected = r#"
  __________________________
 < Hello fellow Rustaceans! >
  --------------------------
@@ -38,7 +38,7 @@ fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
            \___/
 "#;
 
-    let input = b"Hello fellow Rustaceans!";
+    let input = "Hello fellow Rustaceans!";
     let width = 24;
 
     let mut vec = Vec::new();
@@ -47,7 +47,7 @@ fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
 
     let actual = std::str::from_utf8(&vec).unwrap();
 
-    assert_eq!(std::str::from_utf8(&expected[1..]).unwrap(), actual);
+    assert_eq!(&expected[1..], actual);
     Ok(())
 }
 
@@ -55,7 +55,7 @@ fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
 fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
     //Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
-    let expected = br#"
+    let expected = r#"
  ______________
 / Hello fellow \
 \ Rustaceans!  /
@@ -68,7 +68,7 @@ fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
           / '-----' \
 "#;
     #[cfg(feature = "clippy")]
-    let expected = br#"
+    let expected = r#"
  ______________
 / Hello fellow \
 \ Rustaceans!  /
@@ -86,7 +86,7 @@ fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
            \___/
 "#;
 
-    let input = b"Hello fellow Rustaceans!";
+    let input = "Hello fellow Rustaceans!";
     let width = 12;
 
     let mut vec = Vec::new();
@@ -95,7 +95,7 @@ fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
 
     let actual = std::str::from_utf8(&vec).unwrap();
 
-    assert_eq!(std::str::from_utf8(&expected[1..]).unwrap(), actual);
+    assert_eq!(&expected[1..], actual);
     Ok(())
 }
 
@@ -103,7 +103,7 @@ fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
 fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
     //Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
-    let expected = br#"
+    let expected = r#"
  ________
 / Hello  \
 | fellow |
@@ -118,7 +118,7 @@ fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
           / '-----' \
 "#;
     #[cfg(feature = "clippy")]
-    let expected = br#"
+    let expected = r#"
  ________
 / Hello  \
 | fellow |
@@ -138,7 +138,7 @@ fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
            \___/
 "#;
 
-    let input = b"Hello fellow Rustaceans!";
+    let input = "Hello fellow Rustaceans!";
     let width = 6;
 
     let mut vec = Vec::new();
@@ -147,7 +147,7 @@ fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
 
     let actual = std::str::from_utf8(&vec).unwrap();
 
-    assert_eq!(std::str::from_utf8(&expected[1..]).unwrap(), actual);
+    assert_eq!(&expected[1..], actual);
     Ok(())
 }
 
@@ -155,7 +155,7 @@ fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
 fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
     //Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
-    let expected = br#"
+    let expected = r#"
  _____
 / Hel \
 | lo  |
@@ -174,7 +174,7 @@ fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
           / '-----' \
 "#;
     #[cfg(feature = "clippy")]
-    let expected = br#"
+    let expected = r#"
  _____
 / Hel \
 | lo  |
@@ -198,7 +198,7 @@ fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
            \___/
 "#;
 
-    let input = b"Hello fellow Rustaceans!";
+    let input = "Hello fellow Rustaceans!";
     let width = 3;
 
     let mut vec = Vec::new();
@@ -207,31 +207,30 @@ fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
 
     let actual = std::str::from_utf8(&vec).unwrap();
 
-    assert_eq!(std::str::from_utf8(&expected[1..]).unwrap(), actual);
+    assert_eq!(&expected[1..], actual);
     Ok(())
 }
 
 #[test]
 fn multibyte_string() -> Result<(), ()> {
     #[cfg(not(feature = "clippy"))]
-    let expected = concat!(
-        " ____________\n",
-        "< 突然の死👻 >\n",
-        " ------------\n",
-        r#"        \
+    let expected = r#"
+ ____________
+< 突然の死👻 >
+ ------------
+        \
          \
             _~^~^~_
         \) /  o o  \ (/
           '_   -   _'
           / '-----' \
-"#
-    );
+"#;
     #[cfg(feature = "clippy")]
-    let expected = concat!(
-        " ____________\n",
-        "< 突然の死👻 >\n",
-        " ------------\n",
-        r#"        \
+    let expected = r#"
+ ____________
+< 突然の死👻 >
+ ------------
+        \
          \
             __
            /  \
@@ -242,18 +241,17 @@ fn multibyte_string() -> Result<(), ()> {
            || ||
            |\_/|
            \___/
-"#
-    );
+"#;
 
     let input = "突然の死👻";
     let width = DEFAULT_WIDTH;
 
     let mut vec = Vec::new();
 
-    say(input.as_bytes(), width, &mut vec).unwrap();
+    say(input, width, &mut vec).unwrap();
 
     let actual = std::str::from_utf8(&vec).unwrap();
 
-    assert_eq!(std::str::from_utf8(&expected.as_bytes()).unwrap(), actual);
+    assert_eq!(&expected[1..], actual);
     Ok(())
 }
