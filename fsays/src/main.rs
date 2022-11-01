@@ -1,17 +1,12 @@
 #![recursion_limit = "1024"]
 
-extern crate clap;
-extern crate ferris_says;
-#[macro_use]
-extern crate error_chain;
-
 use clap::{App, Arg};
 use ferris_says::*;
+use std::error::Error;
 use std::fs::File;
 use std::io::{stderr, stdin, stdout, BufReader, BufWriter, Read, Write};
 use std::process::exit;
-
-error_chain! {}
+use std::str;
 
 // Constants used for err messages
 const ARGS: &str = "Invalid argument passed to fsays caused an error";
@@ -25,19 +20,11 @@ fn main() {
 
         writeln!(stderr, "error: {}", e).expect(STDERR);
 
-        for e in e.iter().skip(1) {
-            writeln!(stderr, "caused by: {}", e).expect(STDERR);
-        }
-
-        if let Some(backtrace) = e.backtrace() {
-            writeln!(stderr, "backtrace: {:?}", backtrace).expect(STDERR);
-        }
-
         exit(1);
     }
 }
 
-fn run() -> Result<()> {
+fn run() -> Result<(), Box<dyn Error>> {
     let args = App::new("Ferris Says")
         .version("0.1")
         .author("Michael Gattozzi <mgattozzi@gmail.com>")
@@ -68,7 +55,7 @@ fn run() -> Result<()> {
         )
         .get_matches();
 
-    let width = args.value_of("WIDTH").unwrap().parse().chain_err(|| ARGS)?;
+    let width = args.value_of("WIDTH").unwrap().parse().map_err(|_| ARGS)?;
 
     let stdin = stdin();
     let stdout = stdout();
@@ -79,42 +66,43 @@ fn run() -> Result<()> {
         // Read in files and say them with Ferris
         let reader = files
             .map(|i| {
-                let reader = BufReader::new(File::open(i).chain_err(|| INPUT)?);
-                Ok(reader
-                    .bytes()
-                    .fold(Ok(Vec::new()), |a: Result<Vec<u8>>, b| {
+                let reader = BufReader::new(File::open(i).map_err(|_| INPUT)?);
+                Ok(reader.bytes().fold(
+                    Ok(Vec::new()),
+                    |a: Result<Vec<u8>, Box<dyn Error>>, b| {
                         if let Ok(mut a) = a {
-                            a.push(b.chain_err(|| INPUT)?);
+                            a.push(b.map_err(|_| INPUT)?);
                             Ok(a)
                         } else {
                             a
                         }
-                    })?)
+                    },
+                )?)
             })
-            .collect::<Vec<Result<Vec<u8>>>>();
+            .collect::<Vec<Result<Vec<u8>, Box<dyn Error>>>>();
         for i in reader {
-            say(&i?, width, &mut writer).chain_err(|| STDOUT)?;
+            say(str::from_utf8(&i?)?, width, &mut writer).map_err(|_| STDOUT)?;
         }
 
         Ok(())
     } else if let Some(other_args) = args.values_of("TEXT") {
         let s = other_args.collect::<Vec<&str>>().join(" ");
-        say(s.as_bytes(), width, &mut writer).chain_err(|| STDOUT)?;
+        say(&s, width, &mut writer).map_err(|_| STDOUT)?;
 
         Ok(())
     } else {
         let reader = BufReader::new(stdin.lock()).bytes().fold(
             Ok(Vec::new()),
-            |a: Result<Vec<u8>>, b| {
+            |a: Result<Vec<u8>, Box<dyn Error>>, b| {
                 if let Ok(mut a) = a {
-                    a.push(b.chain_err(|| INPUT)?);
+                    a.push(b.map_err(|_| INPUT)?);
                     Ok(a)
                 } else {
                     a
                 }
             },
         )?;
-        say(&reader, width, &mut writer).chain_err(|| STDOUT)?;
+        say(str::from_utf8(&reader)?, width, &mut writer).map_err(|_| STDOUT)?;
 
         Ok(())
     }
