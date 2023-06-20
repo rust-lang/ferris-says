@@ -64,8 +64,8 @@ const BUFSIZE: usize = 2048;
 /// let out = "Hello fellow Rustaceans!";
 /// let width = 24;
 ///
-/// let writer = BufWriter::new(stdout.lock());
-/// say(out, width, writer).unwrap();
+/// let mut writer = BufWriter::new(stdout.lock());
+/// say(out, width, &mut writer).unwrap();
 /// ```
 ///
 /// This will print out:
