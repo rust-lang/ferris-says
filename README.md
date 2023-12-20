@@ -15,19 +15,11 @@ Put the following in your `Cargo.toml`:
 ferris-says = "0.2"
 ```
 
-Then import the crate with:
-
-```rust
-extern crate ferris_says;
-```
-
 ### Example
 
 The following bit of code will write the byte string to STDOUT
 
 ```rust
-extern crate ferris_says;
-
 use ferris_says::say;
 use std::io::{ stdout, BufWriter };
 
