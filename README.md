@@ -12,7 +12,13 @@ Put the following in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ferris-says = "0.2"
+ferris-says = "0.3.1"
+```
+
+or run:
+
+```bash
+$ cargo add ferris-says
 ```
 
 Then import the crate with:
