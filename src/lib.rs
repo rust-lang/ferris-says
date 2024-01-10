@@ -53,8 +53,8 @@ const BUFSIZE: usize = 2048;
 /// The following bit of code will write the byte string to STDOUT
 ///
 /// ```rust
-/// use ferris_says::*;
-/// use std::io::{ stdout, BufWriter };
+/// use ferris_says::say;
+/// use std::io::{stdout, BufWriter};
 ///
 /// let stdout = stdout();
 /// let out = "Hello fellow Rustaceans!";
