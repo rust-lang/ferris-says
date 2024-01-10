@@ -1,7 +1,3 @@
-extern crate smallvec;
-extern crate textwrap;
-extern crate unicode_width;
-
 use smallvec::*;
 use std::io::{Result, Write};
 use textwrap::fill;
