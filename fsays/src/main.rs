@@ -2,11 +2,13 @@
 
 use clap::{App, Arg};
 use ferris_says::*;
-use std::error::Error;
-use std::fs::File;
-use std::io::{stderr, stdin, stdout, BufReader, BufWriter, Read, Write};
-use std::process::exit;
-use std::str;
+use std::{
+    error::Error,
+    fs::File,
+    io::{stderr, stdin, stdout, BufReader, BufWriter, Read, Write},
+    process::exit,
+    str,
+};
 
 // Constants used for err messages
 const ARGS: &str = "Invalid argument passed to fsays caused an error";

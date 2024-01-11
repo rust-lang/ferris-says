@@ -7,7 +7,7 @@ const DEFAULT_WIDTH: usize = 40;
 
 #[test]
 fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
-    //Hello fellow Rustaceans!
+    // Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
     let expected = r#"
  __________________________
@@ -53,7 +53,7 @@ fn hello_fellow_rustaceans_width_24() -> Result<(), ()> {
 
 #[test]
 fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
-    //Hello fellow Rustaceans!
+    // Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
     let expected = r#"
  ______________
@@ -101,7 +101,7 @@ fn hello_fellow_rustaceans_width_12() -> Result<(), ()> {
 
 #[test]
 fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
-    //Hello fellow Rustaceans!
+    // Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
     let expected = r#"
  ________
@@ -153,7 +153,7 @@ fn hello_fellow_rustaceans_width_6() -> Result<(), ()> {
 
 #[test]
 fn hello_fellow_rustaceans_width_3() -> Result<(), ()> {
-    //Hello fellow Rustaceans!
+    // Hello fellow Rustaceans!
     #[cfg(not(feature = "clippy"))]
     let expected = r#"
  _____

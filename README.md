@@ -12,7 +12,13 @@ Put the following in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ferris-says = "0.2"
+ferris-says = "0.3.1"
+```
+
+or run:
+
+```bash
+$ cargo add ferris-says
 ```
 
 Then import the crate with:
@@ -26,13 +32,11 @@ extern crate ferris_says;
 The following bit of code will write the byte string to STDOUT
 
 ```rust
-extern crate ferris_says;
-
 use ferris_says::say;
-use std::io::{ stdout, BufWriter };
+use std::io::{stdout, BufWriter};
 
 fn main() {
-    let out = b"Hello fellow Rustaceans!";
+    let out = "Hello fellow Rustaceans!";
     let width = 24;
 
     let mut writer = BufWriter::new(stdout());
