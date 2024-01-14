@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Rust ${{matrix.rust}} on ${{matrix.os}}
+    runs-on: ${{matrix.os}}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {rust: stable, os: ubuntu}
+          - {rust: stable, os: macos}
+          - {rust: stable, os: windows}
+          - {rust: beta, os: ubuntu}
+          - {rust: nightly, os: ubuntu}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{matrix.rust}}
+      - run: cargo check
+      - run: cargo check --features clippy
+      - run: cargo test
+      - run: cargo test --features clippy
+      - run: cargo doc
