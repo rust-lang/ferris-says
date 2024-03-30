@@ -5,8 +5,7 @@ authors = ["Michael Gattozzi <mgattozzi@gmail.com>"]
 edition = "2021"
 description = "A Rust flavored replacement for the classic cowsay"
 documentation = "https://docs.rs/ferris-says"
-homepage = "https://github.com/mgattozzi/ferris-says"
-repository = "https://github.com/mgattozzi/ferris-says"
+repository = "https://github.com/rust-lang/ferris-says"
 readme = "README.md"
 keywords = ["ferris", "cowsay", "print", "fsays", "rustacean"]
 categories = [
@@ -16,14 +15,7 @@ categories = [
   "command-line-utilities",
   "value-formatting"
 ]
-license = "MIT/Apache-2.0"
-
-[badges]
-travis-ci = { repository = "mgattozzi/ferris-says", branch = "master" }
-appveyor = { repository = "mgattozzi/ferris-says", branch = "master", service = "github" }
-
-[lib]
-name = "ferris_says"
+license = "MIT OR Apache-2.0"
 
 [features]
 clippy = []

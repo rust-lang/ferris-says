@@ -3,9 +3,9 @@
 use clap::{App, Arg};
 use ferris_says::*;
 use std::{
+    fs,
     error::Error,
-    fs::File,
-    io::{stderr, stdin, stdout, BufReader, BufWriter, Read, Write},
+    io::{stderr, stdin, stdout, BufWriter, Read, Write},
     process::exit,
     str,
 };
@@ -59,53 +59,26 @@ fn run() -> Result<(), Box<dyn Error>> {
 
     let width = args.value_of("WIDTH").unwrap().parse().map_err(|_| ARGS)?;
 
-    let stdin = stdin();
+    let mut stdin = stdin();
     let stdout = stdout();
 
     let mut writer = BufWriter::new(stdout.lock());
 
     if let Some(files) = args.values_of("FILES") {
         // Read in files and say them with Ferris
-        let reader = files
-            .map(|i| {
-                let reader = BufReader::new(File::open(i).map_err(|_| INPUT)?);
-                Ok(reader.bytes().fold(
-                    Ok(Vec::new()),
-                    |a: Result<Vec<u8>, Box<dyn Error>>, b| {
-                        if let Ok(mut a) = a {
-                            a.push(b.map_err(|_| INPUT)?);
-                            Ok(a)
-                        } else {
-                            a
-                        }
-                    },
-                )?)
-            })
-            .collect::<Vec<Result<Vec<u8>, Box<dyn Error>>>>();
-        for i in reader {
-            say(str::from_utf8(&i?)?, width, &mut writer).map_err(|_| STDOUT)?;
+        for f in files {
+            let content = fs::read_to_string(f).map_err(|_| INPUT)?;
+            say(&content, width, &mut writer).map_err(|_| STDOUT)?;
         }
-
         Ok(())
     } else if let Some(other_args) = args.values_of("TEXT") {
-        let s = other_args.collect::<Vec<&str>>().join(" ");
-        say(&s, width, &mut writer).map_err(|_| STDOUT)?;
-
+        let text = other_args.collect::<Vec<&str>>().join(" ");
+        say(&text, width, &mut writer).map_err(|_| STDOUT)?;
         Ok(())
     } else {
-        let reader = BufReader::new(stdin.lock()).bytes().fold(
-            Ok(Vec::new()),
-            |a: Result<Vec<u8>, Box<dyn Error>>, b| {
-                if let Ok(mut a) = a {
-                    a.push(b.map_err(|_| INPUT)?);
-                    Ok(a)
-                } else {
-                    a
-                }
-            },
-        )?;
-        say(str::from_utf8(&reader)?, width, &mut writer).map_err(|_| STDOUT)?;
-
+        let mut input = String::new();
+        stdin.read_to_string(&mut input).map_err(|_| INPUT)?;
+        say(&input, width, &mut writer).map_err(|_| STDOUT)?;
         Ok(())
     }
 }

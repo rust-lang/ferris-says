@@ -17,14 +17,8 @@ ferris-says = "0.3.1"
 
 or run:
 
-```bash
-$ cargo add ferris-says
-```
-
-Then import the crate with:
-
-```rust
-extern crate ferris_says;
+```sh
+cargo add ferris-says
 ```
 
 ### Example
