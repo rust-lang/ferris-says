@@ -20,4 +20,4 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 ferris-says = { version = "0.3", path = ".." }
-clap = "2.25"
+clap = { version = "4", features = ["cargo"] }

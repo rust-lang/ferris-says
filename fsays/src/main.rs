@@ -1,17 +1,15 @@
-#![recursion_limit = "1024"]
-
-use clap::{App, Arg};
+use clap::{command, value_parser, Arg, ArgAction};
 use ferris_says::*;
 use std::{
     error::Error,
     fs,
     io::{stderr, stdin, stdout, BufWriter, Read, Write},
+    path::PathBuf,
     process::exit,
     str,
 };
 
 // Constants used for err messages
-const ARGS: &str = "Invalid argument passed to fsays caused an error";
 const INPUT: &str = "Failed to read input to the program";
 const STDOUT: &str = "Failed to write stdout";
 const STDERR: &str = "Failed to write stderr";
@@ -27,52 +25,46 @@ fn main() {
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
-    let args = App::new("Ferris Says")
-        .version("0.1")
-        .author("Michael Gattozzi <mgattozzi@gmail.com>")
+    let args = command!("Ferris Says")
         .about("Prints out input text with Ferris the Rustacean")
         .arg(
-            Arg::with_name("FILES")
+            Arg::new("FILES")
                 .long("files")
-                .short("f")
-                .help("Sets the input files to use")
-                .required(false)
-                .takes_value(true)
-                .multiple(true),
+                .short('f')
+                .help("Set the input files to use")
+                .action(ArgAction::Append)
+                .value_parser(value_parser!(PathBuf)),
         )
         .arg(
-            Arg::with_name("WIDTH")
+            Arg::new("WIDTH")
                 .long("width")
-                .short("w")
-                .help("Sets the width of the text box")
-                .takes_value(true)
+                .short('w')
+                .help("Set the width of the text box")
                 .default_value("40")
-                .required(false),
+                .value_parser(value_parser!(usize)),
         )
-        .arg(
-            Arg::with_name("TEXT")
-                .required(false)
-                .multiple(true)
-                .hidden(true),
-        )
+        .arg(Arg::new("TEXT").action(ArgAction::Append))
         .get_matches();
 
-    let width = args.value_of("WIDTH").unwrap().parse().map_err(|_| ARGS)?;
+    let width = *args.get_one::<usize>("WIDTH").unwrap();
 
     let mut stdin = stdin();
     let stdout = stdout();
 
     let mut writer = BufWriter::new(stdout.lock());
 
-    if let Some(files) = args.values_of("FILES") {
+    if let Some(files) = args.get_many::<PathBuf>("FILES") {
         // Read in files and say them with Ferris
         for f in files {
             let content = fs::read_to_string(f).map_err(|_| INPUT)?;
             say(&content, width, &mut writer).map_err(|_| STDOUT)?;
         }
         Ok(())
-    } else if let Some(other_args) = args.values_of("TEXT") {
-        let text = other_args.collect::<Vec<&str>>().join(" ");
+    } else if let Some(other_args) = args.get_many::<String>("TEXT") {
+        let text = other_args
+            .map(String::as_str)
+            .collect::<Vec<&str>>()
+            .join(" ");
         say(&text, width, &mut writer).map_err(|_| STDOUT)?;
         Ok(())
     } else {
