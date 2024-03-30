@@ -2,6 +2,7 @@
 name = "ferris-says"
 version = "0.3.1"
 authors = ["Michael Gattozzi <mgattozzi@gmail.com>"]
+edition = "2021"
 description = "A Rust flavored replacement for the classic cowsay"
 documentation = "https://docs.rs/ferris-says"
 repository = "https://github.com/rust-lang/ferris-says"
@@ -20,9 +21,9 @@ license = "MIT OR Apache-2.0"
 clippy = []
 
 [dependencies]
-smallvec = "1.9.0"
-textwrap = "0.13"
-unicode-width = "0.1.7"
+smallvec = "1.11.2"
+textwrap = "0.16.0"
+unicode-width = "0.1.11"
 
 [workspace]
 members = ["fsays"]

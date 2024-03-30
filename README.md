@@ -27,7 +27,7 @@ The following bit of code will write the byte string to STDOUT
 
 ```rust
 use ferris_says::say;
-use std::io::{ stdout, BufWriter };
+use std::io::{stdout, BufWriter};
 
 fn main() {
     let out = "Hello fellow Rustaceans!";
