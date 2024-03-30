@@ -10,16 +10,7 @@ use unicode_width::UnicodeWidthStr;
 // Constants! :D
 const ENDSL: &[u8] = b"| ";
 const ENDSR: &[u8] = b" |\n";
-const MASCOT: &[u8] = if !cfg!(feature = "clippy") {
-    br#"
-        \
-         \
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#
-} else {
+const MASCOT: &[u8] = if cfg!(feature = "clippy") {
     br#"
         \
          \
@@ -32,6 +23,15 @@ const MASCOT: &[u8] = if !cfg!(feature = "clippy") {
            || ||
            |\_/|
            \___/
+"#
+} else {
+    br#"
+        \
+         \
+            _~^~^~_
+        \) /  o o  \ (/
+          '_   -   _'
+          / '-----' \
 "#
 };
 const NEWLINE: u8 = b'\n';
