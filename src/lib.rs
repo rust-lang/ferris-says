@@ -6,18 +6,8 @@ use unicode_width::UnicodeWidthStr;
 // Constants! :D
 const ENDSL: &[u8] = b"| ";
 const ENDSR: &[u8] = b" |\n";
-#[cfg(not(feature = "clippy"))]
-const FERRIS: &[u8] = br#"
-        \
-         \
-            _~^~^~_
-        \) /  o o  \ (/
-          '_   -   _'
-          / '-----' \
-"#;
-
-#[cfg(feature = "clippy")]
-const CLIPPY: &[u8] = br#"
+const MASCOT: &[u8] = if cfg!(feature = "clippy") {
+    br#"
         \
          \
             __
@@ -29,7 +19,17 @@ const CLIPPY: &[u8] = br#"
            || ||
            |\_/|
            \___/
-"#;
+"#
+} else {
+    br#"
+        \
+         \
+            _~^~^~_
+        \) /  o o  \ (/
+          '_   -   _'
+          / '-----' \
+"#
+};
 const NEWLINE: u8 = b'\n';
 const DASH: u8 = b'-';
 const UNDERSCORE: u8 = b'_';
@@ -135,10 +135,7 @@ where
     }
 
     // mascot
-    #[cfg(feature = "clippy")]
-    write_buffer.extend_from_slice(CLIPPY);
-    #[cfg(not(feature = "clippy"))]
-    write_buffer.extend_from_slice(FERRIS);
+    write_buffer.extend_from_slice(MASCOT);
 
     writer.write_all(&write_buffer)
 }
