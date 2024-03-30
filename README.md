@@ -12,7 +12,13 @@ Put the following in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ferris-says = "0.2"
+ferris-says = "0.3.1"
+```
+
+or run:
+
+```sh
+cargo add ferris-says
 ```
 
 Then import the crate with:
@@ -32,7 +38,7 @@ use ferris_says::say;
 use std::io::{ stdout, BufWriter };
 
 fn main() {
-    let out = b"Hello fellow Rustaceans!";
+    let out = "Hello fellow Rustaceans!";
     let width = 24;
 
     let mut writer = BufWriter::new(stdout());
