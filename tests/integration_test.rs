@@ -1,5 +1,3 @@
-extern crate ferris_says;
-
 use ferris_says::say;
 
 // Default width when running the binary
