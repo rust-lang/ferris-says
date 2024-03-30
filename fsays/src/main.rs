@@ -3,8 +3,8 @@
 use clap::{App, Arg};
 use ferris_says::*;
 use std::{
-    fs,
     error::Error,
+    fs,
     io::{stderr, stdin, stdout, BufWriter, Read, Write},
     process::exit,
     str,
