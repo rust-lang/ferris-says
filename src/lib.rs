@@ -1,3 +1,4 @@
+use regex::Regex;
 use smallvec::*;
 use std::io::{Result, Write};
 use textwrap::fill;
@@ -84,8 +85,11 @@ where
     // Final output is stored here
     let mut write_buffer = SmallVec::<[u8; BUFSIZE]>::new();
 
+    // Pre process to merge continuous whitespaces into one space character
+    let input = merge_white_spaces(input);
+
     // Let textwrap work its magic
-    let wrapped = fill(input, max_width);
+    let wrapped = fill(input.as_str(), max_width);
 
     let lines: Vec<&str> = wrapped.lines().collect();
 
@@ -146,4 +150,10 @@ fn longest_line(lines: &[&str]) -> usize {
         .map(|line| UnicodeWidthStr::width(*line))
         .max()
         .unwrap_or(0)
+}
+
+/// Merge continues white spaces into one space character while preserving newline characters.
+fn merge_white_spaces(input: &str) -> String {
+    let re = Regex::new(r"([^\S\r\n])+").unwrap();
+    re.replace_all(input, " ").to_string()
 }

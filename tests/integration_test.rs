@@ -253,3 +253,58 @@ fn multibyte_string() -> Result<(), ()> {
     assert_eq!(&expected[1..], actual);
     Ok(())
 }
+
+#[test]
+fn string_with_continues_white_spaces() -> Result<(), ()> {
+    #[cfg(not(feature = "clippy"))]
+    let expected = r#"
+ __________________________________
+/  A string with many white spaces \
+|                                  |
+|                                  |
+\  And many newline characters     /
+ ----------------------------------
+        \
+         \
+            _~^~^~_
+        \) /  o o  \ (/
+          '_   -   _'
+          / '-----' \
+"#;
+    #[cfg(feature = "clippy")]
+    let expected = r#"
+ __________________________________
+/  A string with many white spaces \
+|                                  |
+|                                  |
+\  And many newline characters     /
+ ----------------------------------
+        \
+         \
+            __
+           /  \
+           |  |
+           @  @
+           |  |
+           || |/
+           || ||
+           |\_/|
+           \___/
+"#;
+
+    let input = "			A string        with 					many white spaces
+					
+
+    And many newline characters";
+    let width = DEFAULT_WIDTH;
+
+    let mut vec = Vec::new();
+
+    say(input, width, &mut vec).unwrap();
+
+    let actual = std::str::from_utf8(&vec).unwrap();
+
+    assert_eq!(&expected[1..], actual);
+
+    Ok(())
+}
