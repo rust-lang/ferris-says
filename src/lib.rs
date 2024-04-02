@@ -4,9 +4,6 @@ use std::io::{Result, Write};
 use textwrap::fill;
 use unicode_width::UnicodeWidthStr;
 
-// Constants! :D
-const ENDSL: &[u8] = b"| ";
-const ENDSR: &[u8] = b" |\n";
 const MASCOT: &[u8] = if cfg!(feature = "clippy") {
     br#"
         \
@@ -31,10 +28,6 @@ const MASCOT: &[u8] = if cfg!(feature = "clippy") {
           / '-----' \
 "#
 };
-const NEWLINE: u8 = b'\n';
-const DASH: u8 = b'-';
-const UNDERSCORE: u8 = b'_';
-const SPACE: u8 = b' ';
 
 // A decent number for SmallVec's Buffer Size, not too large
 // but also big enough for most inputs
@@ -97,11 +90,11 @@ where
     let actual_width = longest_line(&lines);
 
     // top box border
-    write_buffer.push(SPACE);
+    write_buffer.push(b' ');
     for _ in 0..(actual_width + 2) {
-        write_buffer.push(UNDERSCORE);
+        write_buffer.push(b'_');
     }
-    write_buffer.push(NEWLINE);
+    write_buffer.push(b'\n');
 
     // inner message
     for (i, line) in lines.into_iter().enumerate() {
@@ -112,13 +105,13 @@ where
         } else if i == line_count - 1 {
             write_buffer.extend_from_slice(b"\\ ");
         } else {
-            write_buffer.extend_from_slice(ENDSL);
+            write_buffer.extend_from_slice(b"| ");
         }
 
         let line_len = UnicodeWidthStr::width(line);
         write_buffer.extend_from_slice(line.as_bytes());
         for _ in line_len..actual_width {
-            write_buffer.push(SPACE);
+            write_buffer.push(b' ');
         }
 
         if line_count == 1 {
@@ -128,14 +121,14 @@ where
         } else if i == line_count - 1 {
             write_buffer.extend_from_slice(b" /\n");
         } else {
-            write_buffer.extend_from_slice(ENDSR);
+            write_buffer.extend_from_slice(b" |\n");
         }
     }
 
     // bottom box border
-    write_buffer.push(SPACE);
+    write_buffer.push(b' ');
     for _ in 0..(actual_width + 2) {
-        write_buffer.push(DASH);
+        write_buffer.push(b'-');
     }
 
     // mascot
