@@ -12,7 +12,7 @@ Put the following in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ferris-says = "0.3.1"
+ferris-says = "0.3.2"
 ```
 
 or run:

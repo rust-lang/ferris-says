@@ -1,6 +1,6 @@
 [package]
 name = "ferris-says"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Michael Gattozzi <mgattozzi@gmail.com>"]
 edition = "2021"
 description = "A Rust flavored replacement for the classic cowsay"
